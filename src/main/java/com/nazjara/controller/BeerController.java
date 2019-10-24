@@ -2,12 +2,10 @@ package com.nazjara.controller;
 
 import com.nazjara.dto.BeerDto;
 import com.nazjara.service.BeerService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -22,7 +20,15 @@ public class BeerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BeerDto> getBeer(@PathVariable UUID id) {
-        return new ResponseEntity<>(beerService.getBeer(id), HttpStatus.OK);
+    public ResponseEntity<BeerDto> get(@PathVariable UUID id) {
+        return new ResponseEntity<>(beerService.get(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity create(BeerDto beerDto) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/api/v1/beer/" + beerService.create(beerDto).getId().toString());
+
+        return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 }
