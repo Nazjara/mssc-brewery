@@ -1,13 +1,12 @@
 package com.nazjara.controller;
 
 import com.nazjara.dto.CustomerDto;
+import com.nazjara.dto.CustomerDto;
 import com.nazjara.service.CustomerService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -24,5 +23,24 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDto> get(@PathVariable UUID id) {
         return new ResponseEntity<>(customerService.get(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity create(@RequestBody CustomerDto customerDto) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/api/v1/customer/" + customerService.create(customerDto).getId().toString());
+
+        return new ResponseEntity(headers, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerDto> update(@PathVariable UUID id, @RequestBody CustomerDto customerDto) {
+        return new ResponseEntity<>(customerService.update(id, customerDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable UUID id) {
+        customerService.delete(id);
     }
 }
