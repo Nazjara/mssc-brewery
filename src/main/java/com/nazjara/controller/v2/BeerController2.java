@@ -1,7 +1,7 @@
-package com.nazjara.controller;
+package com.nazjara.controller.v2;
 
-import com.nazjara.dto.BeerDto;
-import com.nazjara.service.BeerService;
+import com.nazjara.dto.v2.BeerDto2;
+import com.nazjara.service.v2.BeerService2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,33 +9,32 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@Deprecated
 @RestController
-@RequestMapping("/api/v1/beer")
-public class BeerController {
+@RequestMapping("/api/v2/beer")
+public class BeerController2 {
 
-    private final BeerService beerService;
+    private final BeerService2 beerService;
 
-    public BeerController(BeerService beerService) {
+    public BeerController2(BeerService2 beerService) {
         this.beerService = beerService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BeerDto> get(@PathVariable UUID id) {
+    public ResponseEntity<BeerDto2> get(@PathVariable UUID id) {
         return new ResponseEntity<>(beerService.get(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody BeerDto beerDto) {
+    public ResponseEntity create(@RequestBody BeerDto2 beerDto2) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/beer/" + beerService.create(beerDto).getId().toString());
+        headers.add("Location", "/api/v1/beer/" + beerService.create(beerDto2).getId().toString());
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BeerDto> update(@PathVariable UUID id, @RequestBody BeerDto beerDto) {
-        return new ResponseEntity<>(beerService.update(id, beerDto), HttpStatus.OK);
+    public ResponseEntity<BeerDto2> update(@PathVariable UUID id, @RequestBody BeerDto2 beerDto2) {
+        return new ResponseEntity<>(beerService.update(id, beerDto2), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
