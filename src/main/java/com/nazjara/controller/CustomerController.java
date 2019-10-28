@@ -1,13 +1,13 @@
 package com.nazjara.controller;
 
 import com.nazjara.dto.CustomerDto;
-import com.nazjara.dto.CustomerDto;
 import com.nazjara.service.CustomerService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -26,7 +26,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity create(@RequestBody @Valid CustomerDto customerDto) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer/" + customerService.create(customerDto).getId().toString());
 
@@ -34,7 +34,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerDto> update(@PathVariable UUID id, @RequestBody CustomerDto customerDto) {
+    public ResponseEntity<CustomerDto> update(@PathVariable UUID id, @RequestBody @Valid CustomerDto customerDto) {
         return new ResponseEntity<>(customerService.update(id, customerDto), HttpStatus.OK);
     }
 
